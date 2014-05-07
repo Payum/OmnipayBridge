@@ -6,6 +6,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\CaptureRequest;
 use Payum\Core\Request\RedirectUrlInteractiveRequest;
+use Payum\Core\Request\PostRedirectUrlInteractiveRequest;
 
 class CaptureAction extends BaseApiAwareAction
 {
@@ -28,7 +29,12 @@ class CaptureAction extends BaseApiAwareAction
         }
 
         if ($response->isRedirect()) {
-            throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+            if ($response->getRedirectMethod() == 'POST') {
+                throw new PostRedirectUrlInteractiveRequest($response->getRedirectUrl(), $response->getRedirectData());
+            }
+            else {
+                throw new RedirectUrlInteractiveRequest($response->getRedirectUrl());
+            }
         }
 
         $options['_reference']      = $response->getTransactionReference();
