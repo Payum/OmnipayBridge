@@ -2,7 +2,7 @@
 namespace Payum\OmnipayBridge\Tests;
 
 use Omnipay\Common\GatewayInterface;
-use Payum\OmnipayBridge\OnsitePaymentFactory;
+use Payum\OmnipayBridge\OffsitePaymentFactory;
 
 class OnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class OnsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->createGatewayMock();
         
-        $payment = OnsitePaymentFactory::create($gatewayMock);
+        $payment = OffsitePaymentFactory::create($gatewayMock);
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
         

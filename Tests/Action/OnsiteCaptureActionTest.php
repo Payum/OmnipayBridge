@@ -4,7 +4,7 @@ namespace Payum\OmnipayBridge\Tests\Action;
 use Omnipay\Common\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
+use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 
 class OnsiteCaptureActionTest extends GenericActionTest
 {
@@ -59,7 +59,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
             ->will($this->returnValue($requestMock))
         ;
 
-        $action = new OnsiteCaptureAction;
+        $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
         $action->setPayment($this->createPaymentMock());
 
@@ -81,7 +81,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
             ->method('completePurchase')
         ;
 
-        $action = new OnsiteCaptureAction;
+        $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
         $action->setPayment($this->createPaymentMock());
 

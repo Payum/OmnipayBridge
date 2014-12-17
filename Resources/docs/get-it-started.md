@@ -19,34 +19,31 @@ We have to only add a the payment factory. All the rest remain the same:
 
 ```php
 <?php
-
-use Omnipay\Common\GatewayFactory;
-use Payum\OmnipayBridge\PaymentFactory as OmnipayPaymentFactory;
-use Payum\OmnipayBridge\OnsitePaymentFactory as OmnipayOnsitePaymentFactory;
-
 //config.php
 
 // ...
 
-$gatewayFactory = new GatewayFactory;
-$gatewayFactory->find();
+// direct payment like Stripe or Authorize.Net
 
-$stripeGateway = $gatewayFactory->create('Stripe');
-$stripeGateway->setApiKey('REPLACE IT');
-$stripeGateway->setTestMode(true);
+$directOmnipayFactory = new Payum\OmnipayBridge\DirectPaymentFactory();
+$payments['stripe_omnipay'] = $directOmnipayFactory->create(array(
+    'type' => 'Stripe',
+    'options' => array('apiKey' => 'REPLACE IT', 'testMode' => true),
+));
 
-$payments['stripe_omnipay'] = OmnipayPaymentFactory::create($stripeGateway);
 
-// or onsite payment
+// or offsite payment like Paypal ExpressCheckout
 
-$paypalGateway = $gatewayFactory->create('PayPal_Express');
-$paypalGateway->setUsername('REPLACE IT');
-$paypalGateway->setPassowrd('REPLACE IT');
-$paypalGateway->setSignature('REPLACE IT');
-$paypalGateway->setTestMode(true);
-
-$payments['paypal_omnipay'] = OmnipayOnsitePaymentFactory::create($paypalGateway);
-
+$offsiteOmnipayFactory = new Payum\OmnipayBridge\OffsitePaymentFactory();
+$payments['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
+    'type' => 'PayPal_Express',
+    'options' => array(
+        'username' => 'REPLACE IT', 
+        'password' => 'REPLACE IT',
+        'signature' => 'REPLACE IT',
+        'testMode' => true
+    ),
+));
 ```
 
 ## prepare.php

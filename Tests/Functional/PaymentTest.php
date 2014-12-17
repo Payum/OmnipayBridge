@@ -3,7 +3,7 @@ namespace Payum\OmnipayBridge\Tests\Functional;
 
 use Omnipay\Dummy\Gateway;
 
-use Payum\OmnipayBridge\OnsitePaymentFactory;
+use Payum\OmnipayBridge\OffsitePaymentFactory;
 use Payum\Core\Request\GetBinaryStatus;
 use Payum\Core\Request\Capture;
 
@@ -14,7 +14,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishSuccessfully()
     {
-        $payment = OnsitePaymentFactory::create(new Gateway());
+        $payment = OffsitePaymentFactory::create(new Gateway());
 
         $date = new \DateTime('now + 2 year');
 
@@ -43,7 +43,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishWithFailed()
     {
-        $payment = OnsitePaymentFactory::create(new Gateway());
+        $payment = OffsitePaymentFactory::create(new Gateway());
 
         $date = new \DateTime('now + 2 year');
 
