@@ -10,7 +10,7 @@ use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\GetHttpRequest;
 
-class OnsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
+class OffsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
 {
     /**
      * @var PaymentInterface

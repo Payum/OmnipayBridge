@@ -1,10 +1,8 @@
 <?php
 namespace Payum\OmnipayBridge\Tests\Functional;
 
-use Omnipay\Dummy\Gateway;
-
-use Payum\OmnipayBridge\OnsitePaymentFactory;
-use Payum\Core\Request\GetBinaryStatus;
+use Payum\Core\Request\GetHumanStatus;
+use Payum\OmnipayBridge\OffsitePaymentFactory;
 use Payum\Core\Request\Capture;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +12,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishSuccessfully()
     {
-        $payment = OnsitePaymentFactory::create(new Gateway());
+        $factory = new OffsitePaymentFactory;
+
+        $payment = $factory->create(array('type' => 'Dummy'));
 
         $date = new \DateTime('now + 2 year');
 
@@ -32,7 +32,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->execute($capture);
 
-        $statusRequest = new GetBinaryStatus($capture->getModel());
+        $statusRequest = new GetHumanStatus($capture->getModel());
         $payment->execute($statusRequest);
 
         $this->assertTrue($statusRequest->isCaptured());
@@ -43,7 +43,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishWithFailed()
     {
-        $payment = OnsitePaymentFactory::create(new Gateway());
+        $factory = new OffsitePaymentFactory;
+
+        $payment = $factory->create(array('type' => 'Dummy'));
 
         $date = new \DateTime('now + 2 year');
 
@@ -61,7 +63,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $payment->execute($capture);
 
-        $statusRequest = new GetBinaryStatus($capture->getModel());
+        $statusRequest = new GetHumanStatus($capture->getModel());
         $payment->execute($statusRequest);
 
         $this->assertTrue($statusRequest->isFailed());

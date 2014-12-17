@@ -4,11 +4,11 @@ namespace Payum\OmnipayBridge\Tests\Action;
 use Omnipay\Common\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
-use Payum\OmnipayBridge\Action\OnsiteCaptureAction;
+use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 
-class OnsiteCaptureActionTest extends GenericActionTest
+class OffsiteCaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\OmnipayBridge\Action\OnsiteCaptureAction';
+    protected $actionClass = 'Payum\OmnipayBridge\Action\OffsiteCaptureAction';
 
     protected $requestClass = 'Payum\Core\Request\Capture';
 
@@ -17,7 +17,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OnsiteCaptureAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OffsiteCaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
@@ -59,7 +59,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
             ->will($this->returnValue($requestMock))
         ;
 
-        $action = new OnsiteCaptureAction;
+        $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
         $action->setPayment($this->createPaymentMock());
 
@@ -81,7 +81,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
             ->method('completePurchase')
         ;
 
-        $action = new OnsiteCaptureAction;
+        $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
         $action->setPayment($this->createPaymentMock());
 

@@ -32,9 +32,11 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Payum\\OmnipayBridge": "" }
+        "psr-4": { "Payum\\OmnipayBridge\\": "src" }
     },
-    "target-dir": "Payum/OmnipayBridge",
+    "autoload-dev": {
+        "psr-4": { "Payum\\OmnipayBridge\\Tests\\": "tests" }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.13-dev"
