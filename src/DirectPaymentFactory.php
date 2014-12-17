@@ -18,7 +18,13 @@ class DirectPaymentFactory extends PaymentFactory
     protected function build(Payment $payment, ArrayObject $config)
     {
         if (false == $config['payum.api.gateway']) {
-            $config->validateNotEmpty(array('type', 'options'));
+            $config->validateNotEmpty(array('type'));
+
+            $config->defaults(array(
+                'options' => array(
+                    'testMode' => true,
+                ),
+            ));
 
             $gatewayFactory = Omnipay::getFactory();
             $gatewayFactory->find();

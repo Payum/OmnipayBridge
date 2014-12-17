@@ -6,9 +6,9 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 
-class OnsiteCaptureActionTest extends GenericActionTest
+class OffsiteCaptureActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\OmnipayBridge\Action\OnsiteCaptureAction';
+    protected $actionClass = 'Payum\OmnipayBridge\Action\OffsiteCaptureAction';
 
     protected $requestClass = 'Payum\Core\Request\Capture';
 
@@ -17,7 +17,7 @@ class OnsiteCaptureActionTest extends GenericActionTest
      */
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OnsiteCaptureAction');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\OffsiteCaptureAction');
         
         $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
