@@ -1,6 +1,7 @@
 <?php
 namespace Payum\OmnipayBridge\Tests;
 
+use Omnipay\Common\GatewayInterface;
 use Payum\OmnipayBridge\DirectPaymentFactory;
 
 class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
@@ -51,7 +52,7 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new DirectPaymentFactory();
 
         $payment = $factory->create(array(
-            'payum.api.gateway' => $this->createGatewayMock(),
+            'payum.api' => $this->createGatewayMock(),
         ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
@@ -64,11 +65,16 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @test
      */
-    protected function createGatewayMock()
+    public function shouldAllowCreatePaymentConfig()
     {
-        return $this->getMock('Omnipay\Common\GatewayInterface');
+        $factory = new DirectPaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
     }
 
     /**
@@ -95,5 +101,13 @@ class DirectPaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new DirectPaymentFactory();
 
         $factory->create(array('type' => 'Invalid'));
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
+    {
+        return $this->getMock('Omnipay\Common\GatewayInterface');
     }
 }

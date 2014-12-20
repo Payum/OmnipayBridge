@@ -51,7 +51,7 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new OffsitePaymentFactory();
 
         $payment = $factory->create(array(
-            'payum.api.gateway' => $this->createGatewayMock(),
+            'payum.api' => $this->createGatewayMock(),
         ));
 
         $this->assertInstanceOf('Payum\Core\Payment', $payment);
@@ -61,14 +61,6 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $extensions = $this->readAttribute($payment, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
-     */
-    protected function createGatewayMock()
-    {
-        return $this->getMock('Omnipay\Common\GatewayInterface');
     }
 
     /**
@@ -86,6 +78,19 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldAllowCreatePaymentConfig()
+    {
+        $factory = new OffsitePaymentFactory();
+
+        $config = $factory->createConfig();
+
+        $this->assertInternalType('array', $config);
+        $this->assertNotEmpty($config);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Given type Invalid is not supported. Try one of supported types: Dummy.
@@ -95,5 +100,13 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new OffsitePaymentFactory();
 
         $factory->create(array('type' => 'Invalid'));
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     */
+    protected function createGatewayMock()
+    {
+        return $this->getMock('Omnipay\Common\GatewayInterface');
     }
 }
