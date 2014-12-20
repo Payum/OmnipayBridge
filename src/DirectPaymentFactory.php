@@ -5,51 +5,75 @@ use Omnipay\Omnipay;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Payment;
-use Payum\Core\PaymentFactory;
+use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\PaymentFactoryInterface;
 use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\FillOrderDetailsAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
-class DirectPaymentFactory extends PaymentFactory
+class DirectPaymentFactory implements PaymentFactoryInterface
 {
+    /**
+     * @var PaymentFactoryInterface
+     */
+    protected $corePaymentFactory;
+
+    /**
+     * @param PaymentFactoryInterface $corePaymentFactory
+     */
+    public function __construct(PaymentFactoryInterface $corePaymentFactory = null)
+    {
+        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function build(Payment $payment, ArrayObject $config)
+    public function create(array $config = array())
     {
-        if (false == $config['payum.api.gateway']) {
-            $config->validateNotEmpty(array('type'));
+        return $this->corePaymentFactory->create($this->createConfig($config));
+    }
 
-            $config->defaults(array(
-                'options' => array(
-                    'testMode' => true,
-                ),
-            ));
-
-            $gatewayFactory = Omnipay::getFactory();
-            $gatewayFactory->find();
-
-            $supportedTypes = $gatewayFactory->all();
-            if (false == in_array($config['type'], $supportedTypes)) {
-                throw new LogicException(sprintf(
-                    'Given type %s is not supported. Try one of supported types: %s.',
-                    $config['type'],
-                    implode(', ', $supportedTypes)
-                ));
-            }
-
-            $gateway = $gatewayFactory->create($config['type']);
-            foreach ($config['options'] as $name => $value) {
-                $gateway->{'set'.strtoupper($name)}($value);
-            }
-
-            $config['payum.api.gateway'] = $gateway;
-        }
-
+    /**
+     * {@inheritDoc}
+     */
+    public function createConfig(array $config = array())
+    {
+        $config = ArrayObject::ensureArrayObject($config);
+        $config->defaults($this->corePaymentFactory->createConfig());
         $config->defaults(array(
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             'payum.action.status' => new StatusAction(),
         ));
+
+        if (false == $config['payum.api']) {
+            $config['options.required'] = array('type');
+
+            $config['payum.api.gateway'] = function(ArrayObject $config) {
+                $config->validateNotEmpty($config['options.required']);
+
+                $gatewayFactory = Omnipay::getFactory();
+                $gatewayFactory->find();
+
+                $supportedTypes = $gatewayFactory->all();
+                if (false == in_array($config['type'], $supportedTypes)) {
+                    throw new LogicException(sprintf(
+                        'Given type %s is not supported. Try one of supported types: %s.',
+                        $config['type'],
+                        implode(', ', $supportedTypes)
+                    ));
+                }
+
+                $gateway = $gatewayFactory->create($config['type']);
+                foreach ($config['options'] as $name => $value) {
+                    $gateway->{'set'.strtoupper($name)}($value);
+                }
+
+                return $gateway;
+            };
+        }
+
+        return (array) $config;
     }
 }
