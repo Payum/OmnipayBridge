@@ -49,6 +49,7 @@ class DirectPaymentFactory implements PaymentFactoryInterface
 
         if (false == $config['payum.api']) {
             $config['options.required'] = array('type');
+            $config->defaults(array('options' => array()));
 
             $config['payum.api.gateway'] = function(ArrayObject $config) {
                 $config->validateNotEmpty($config['options.required']);
