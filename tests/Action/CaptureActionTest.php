@@ -18,7 +18,7 @@ class CaptureActionTest extends GenericActionTest
     public function shouldBeSubClassOfBaseApiAwareAction()
     {
         $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
-        
+
         $this->assertTrue($rc->isSubclassOf('Payum\OmnipayBridge\Action\BaseApiAwareAction'));
     }
 
@@ -34,16 +34,11 @@ class CaptureActionTest extends GenericActionTest
 
     /**
      * @test
+     *
+     * @dataProvider provideDetails
      */
-    public function shouldCallGatewayPurchaseMethodWithExpectedArguments()
+    public function shouldCallGatewayPurchaseMethodWithExpectedArguments($details)
     {
-        $details = array(
-            'foo' => 'fooVal',
-            'bar' => 'barVal',
-            'card' => array('cvv' => 123),
-            'clientIp' => '',
-        );
-
         $requestMock = $this->getMock('Omnipay\Common\Message\RequestInterface');
         $requestMock
             ->expects($this->once())
@@ -96,5 +91,27 @@ class CaptureActionTest extends GenericActionTest
     protected function createGatewayMock()
     {
         return $this->getMock('Payum\OmnipayBridge\Tests\DummyGateway');
+    }
+
+    public static function provideDetails()
+    {
+        return array(
+            array(
+                array(
+                    'foo' => 'fooVal',
+                    'bar' => 'barVal',
+                    'card' => array('cvv' => 123),
+                    'clientIp' => '',
+                )
+            ),
+            array(
+                array(
+                    'foo' => 'fooVal',
+                    'bar' => 'barVal',
+                    'cardReference' => 'abc',
+                    'clientIp' => '',
+                )
+            ),
+        );
     }
 }

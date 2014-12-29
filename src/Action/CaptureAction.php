@@ -49,7 +49,7 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
             $details['clientIp'] = $httpRequest->clientIp;
         }
 
-        if (false == $details->validateNotEmpty(array('card'), false)) {
+        if (false == $details->validateNotEmpty(array('card'), false) && false == $details->validateNotEmpty(array('cardReference'), false)) {
             try {
                 $this->payment->execute($creditCardRequest = new ObtainCreditCard);
                 $card = $creditCardRequest->obtain();
