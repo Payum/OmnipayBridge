@@ -6,6 +6,8 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\PaymentAwareInterface;
 use Payum\Core\PaymentInterface;
+use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
@@ -68,6 +70,17 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
         }
 
         $response = $this->gateway->purchase($details->toUnsafeArray())->send();
+
+        if ($response->isRedirect()) {
+            $details['_completeCaptureRequired'] = 1;
+
+            if ($response->getRedirectMethod() == 'POST') {
+                throw new HttpPostRedirect($response->getRedirectUrl(), $response->getRedirectData());
+            }
+            else {
+                throw new HttpRedirect($response->getRedirectUrl());
+            }
+        }
 
         $details['_reference']      = $response->getTransactionReference();
         $details['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
