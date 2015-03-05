@@ -51,25 +51,31 @@ class CaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
             $details['clientIp'] = $httpRequest->clientIp;
         }
 
-        if (false == $details->validateNotEmpty(array('card'), false) && false == $details->validateNotEmpty(array('cardReference'), false)) {
-            try {
-                $this->payment->execute($creditCardRequest = new ObtainCreditCard);
-                $card = $creditCardRequest->obtain();
+        if (isset($details['_completeCaptureRequired'])) {
+            $response = $this->gateway->completePurchase($details->toUnsafeArray())->send();
 
-                $details['card'] = new SensitiveValue(array(
-                    'number' => $card->getNumber(),
-                    'cvv' => $card->getSecurityCode(),
-                    'expiryMonth' => $card->getExpireAt()->format('m'),
-                    'expiryYear' => $card->getExpireAt()->format('y'),
-                    'firstName' => $card->getHolder(),
-                    'lastName' => '',
-                ));
-            } catch (RequestNotSupportedException $e) {
-                throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
+            unset($details['_completeCaptureRequired']);
+        } else {
+            if (false == $details->validateNotEmpty(array('card'), false) && false == $details->validateNotEmpty(array('cardReference'), false)) {
+                try {
+                    $this->payment->execute($creditCardRequest = new ObtainCreditCard);
+                    $card = $creditCardRequest->obtain();
+
+                    $details['card'] = new SensitiveValue(array(
+                        'number' => $card->getNumber(),
+                        'cvv' => $card->getSecurityCode(),
+                        'expiryMonth' => $card->getExpireAt()->format('m'),
+                        'expiryYear' => $card->getExpireAt()->format('y'),
+                        'firstName' => $card->getHolder(),
+                        'lastName' => '',
+                    ));
+                } catch (RequestNotSupportedException $e) {
+                    throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
+                }
             }
-        }
 
-        $response = $this->gateway->purchase($details->toUnsafeArray())->send();
+            $response = $this->gateway->purchase($details->toUnsafeArray())->send();
+        }
 
         if ($response->isRedirect()) {
             $details['_completeCaptureRequired'] = 1;
