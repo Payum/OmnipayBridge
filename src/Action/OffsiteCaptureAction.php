@@ -55,8 +55,9 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInt
         }
 
         if (isset($details['_completeCaptureRequired'])) {
-            unset($details['_completeCaptureRequired']);
             $response = $this->gateway->completePurchase($details->toUnsafeArray())->send();
+
+            unset($details['_completeCaptureRequired']);
         } else {
             $response = $this->gateway->purchase($details->toUnsafeArray())->send();
         }
