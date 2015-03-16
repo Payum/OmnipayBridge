@@ -4,6 +4,7 @@ namespace Payum\OmnipayBridge\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Security\SensitiveValue;
 use Payum\Offline\Constants;
 
 class FillOrderDetailsAction implements ActionInterface
@@ -24,6 +25,19 @@ class FillOrderDetailsAction implements ActionInterface
         $details['amount'] = (float) $order->getTotalAmount() / $divisor;
         $details['currency'] = $order->getCurrencyCode();
         $details['description'] = $order->getDescription();
+
+        if ($order->getCreditCard()) {
+            $card = $order->getCreditCard();
+
+            $details['card'] = new SensitiveValue(array(
+                'number' => $card->getNumber(),
+                'cvv' => $card->getSecurityCode(),
+                'expiryMonth' => $card->getExpireAt()->format('m'),
+                'expiryYear' => $card->getExpireAt()->format('y'),
+                'firstName' => $card->getHolder(),
+                'lastName' => '',
+            ));
+        }
 
         $order->setDetails($details);
     }
