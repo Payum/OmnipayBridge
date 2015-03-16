@@ -30,9 +30,7 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInt
      */
     public function execute($request)
     {
-        if (!$this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
