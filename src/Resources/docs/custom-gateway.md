@@ -1,7 +1,7 @@
 # Custom gateway.
 
 In this chapter we are going to show how you can create a payment with custom [Omnipay](https://github.com/omnipay/omnipay) gateway. It may be community created gateway or you own.
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## config.php

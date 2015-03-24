@@ -1,7 +1,7 @@
 # Get it started.
 
 In this chapter we are going to talk about the most common task: purchase of a product using [Omnipay](https://github.com/omnipay/omnipay).
-We assume you already read [get it started](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/get-it-started.md) from core.
+We assume you already read [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) from core.
 Here we just show you modifications you have to put to the files shown there.
 
 ## Installation
