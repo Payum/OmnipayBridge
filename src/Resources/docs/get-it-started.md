@@ -49,6 +49,21 @@ $payments['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
 ## prepare.php
 
 Here you have to modify a `paymentName` value. Set it to `stripe_omnipay` or `paypal_omnipay` or any other you configure.
+The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
+If you have to pass a credit card just add it to the Order like this:
+
+```
+use Payum\Core\Model\CreditCard;
+
+// ...
+
+$card = new CreditCard();
+$card->setNumber('4111111111111111');
+$card->setExpireAt(new \DateTime('2018-10-10'));
+$card->setSecurityCode(123);
+
+$order->setCreditCard($card);
+```
 
 ## Next
 
