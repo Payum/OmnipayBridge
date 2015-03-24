@@ -20,7 +20,7 @@ $storages = array(
     
     //put other storages
 );
-
+```
 
 ## prepare.php
 
