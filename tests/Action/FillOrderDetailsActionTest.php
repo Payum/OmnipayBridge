@@ -37,19 +37,19 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $order = new Payment;
-        $order->setNumber('theNumber');
-        $order->setCurrencyCode('USD');
-        $order->setTotalAmount(123);
-        $order->setDescription('the description');
-        $order->setClientId('theClientId');
-        $order->setClientEmail('theClientEmail');
+        $payment = new Payment;
+        $payment->setNumber('theNumber');
+        $payment->setCurrencyCode('USD');
+        $payment->setTotalAmount(123);
+        $payment->setDescription('the description');
+        $payment->setClientId('theClientId');
+        $payment->setClientEmail('theClientEmail');
 
         $action = new FillOrderDetailsAction;
 
-        $action->execute(new FillOrderDetails($order));
+        $action->execute(new FillOrderDetails($payment));
 
-        $details = $order->getDetails();
+        $details = $payment->getDetails();
 
         $this->assertNotEmpty($details);
 
@@ -74,20 +74,20 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $creditCard->setSecurityCode('322');
         $creditCard->setExpireAt(new \DateTime('2015-11-12'));
 
-        $order = new Order;
-        $order->setNumber('theNumber');
-        $order->setCurrencyCode('USD');
-        $order->setTotalAmount(123);
-        $order->setDescription('the description');
-        $order->setClientId('theClientId');
-        $order->setClientEmail('theClientEmail');
-        $order->setCreditCard($creditCard);
+        $payment = new Payment;
+        $payment->setNumber('theNumber');
+        $payment->setCurrencyCode('USD');
+        $payment->setTotalAmount(123);
+        $payment->setDescription('the description');
+        $payment->setClientId('theClientId');
+        $payment->setClientEmail('theClientEmail');
+        $payment->setCreditCard($creditCard);
 
         $action = new FillOrderDetailsAction;
 
-        $action->execute(new FillOrderDetails($order));
+        $action->execute(new FillOrderDetails($payment));
 
-        $details = $order->getDetails();
+        $details = $payment->getDetails();
 
         $this->assertNotEmpty($details);
 
@@ -108,19 +108,19 @@ class FillOrderDetailsActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $order = new Payment;
-        $order->setCurrencyCode('USD');
-        $order->setTotalAmount(123);
-        $order->setDescription('the description');
-        $order->setDetails(array(
+        $payment = new Payment;
+        $payment->setCurrencyCode('USD');
+        $payment->setTotalAmount(123);
+        $payment->setDescription('the description');
+        $payment->setDetails(array(
             'foo' => 'fooVal',
         ));
 
         $action = new FillOrderDetailsAction;
 
-        $action->execute(new FillOrderDetails($order));
+        $action->execute(new FillOrderDetails($payment));
 
-        $details = $order->getDetails();
+        $details = $payment->getDetails();
 
         $this->assertNotEmpty($details);
 

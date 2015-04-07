@@ -62,7 +62,7 @@ $card->setNumber('4111111111111111');
 $card->setExpireAt(new \DateTime('2018-10-10'));
 $card->setSecurityCode(123);
 
-$order->setCreditCard($card);
+$payment->setCreditCard($card);
 ```
 
 ## Next

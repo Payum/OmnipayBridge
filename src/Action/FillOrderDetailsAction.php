@@ -18,16 +18,16 @@ class FillOrderDetailsAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $order = $request->getOrder();
-        $divisor = pow(10, $order->getCurrencyDigitsAfterDecimalPoint());
+        $payment = $request->getOrder();
+        $divisor = pow(10, $payment->getCurrencyDigitsAfterDecimalPoint());
 
-        $details = $order->getDetails();
-        $details['amount'] = (float) $order->getTotalAmount() / $divisor;
-        $details['currency'] = $order->getCurrencyCode();
-        $details['description'] = $order->getDescription();
+        $details = $payment->getDetails();
+        $details['amount'] = (float) $payment->getTotalAmount() / $divisor;
+        $details['currency'] = $payment->getCurrencyCode();
+        $details['description'] = $payment->getDescription();
 
-        if ($order->getCreditCard()) {
-            $card = $order->getCreditCard();
+        if ($payment->getCreditCard()) {
+            $card = $payment->getCreditCard();
 
             $details['card'] = new SensitiveValue(array(
                 'number' => $card->getNumber(),
@@ -39,7 +39,7 @@ class FillOrderDetailsAction implements ActionInterface
             ));
         }
 
-        $order->setDetails($details);
+        $payment->setDetails($details);
     }
 
     /**
