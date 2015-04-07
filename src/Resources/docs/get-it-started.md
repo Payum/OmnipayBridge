@@ -15,7 +15,7 @@ php composer.phar require "payum/omnipay-bridge:*@stable"
 
 ## config.php
 
-We have to only add a the payment factory. All the rest remain the same:
+We have to only add a the gateway factory. All the rest remain the same:
 
 ```php
 <?php
@@ -25,8 +25,8 @@ We have to only add a the payment factory. All the rest remain the same:
 
 // direct payment like Stripe or Authorize.Net
 
-$directOmnipayFactory = new Payum\OmnipayBridge\DirectPaymentFactory();
-$payments['stripe_omnipay'] = $directOmnipayFactory->create(array(
+$directOmnipayFactory = new Payum\OmnipayBridge\DirectGatewayFactory();
+$gateways['stripe_omnipay'] = $directOmnipayFactory->create(array(
     'type' => 'Stripe',
     'options' => array('apiKey' => 'REPLACE IT', 'testMode' => true),
 ));
@@ -34,8 +34,8 @@ $payments['stripe_omnipay'] = $directOmnipayFactory->create(array(
 
 // or offsite payment like Paypal ExpressCheckout
 
-$offsiteOmnipayFactory = new Payum\OmnipayBridge\OffsitePaymentFactory();
-$payments['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
+$offsiteOmnipayFactory = new Payum\OmnipayBridge\OffsiteGatewayFactory();
+$gateways['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
     'type' => 'PayPal_Express',
     'options' => array(
         'username' => 'REPLACE IT', 
@@ -48,7 +48,7 @@ $payments['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
 
 ## prepare.php
 
-Here you have to modify a `paymentName` value. Set it to `stripe_omnipay` or `paypal_omnipay` or any other you configure.
+Here you have to modify a `gatewayName` value. Set it to `stripe_omnipay` or `paypal_omnipay` or any other you configure.
 The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 If you have to pass a credit card just add it to the Order like this:
 
@@ -69,7 +69,7 @@ $order->setCreditCard($card);
 
 * [Core's Get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md).
 * [The architecture](https://github.com/Payum/Core/blob/master/Resources/docs/the-architecture.md).
-* [Supported payments](https://github.com/Payum/Core/blob/master/Resources/docs/supported-payments.md).
+* [Supported gateways](https://github.com/Payum/Core/blob/master/Resources/docs/supported-gateways.md).
 * [Storages](https://github.com/Payum/Core/blob/master/Resources/docs/storages.md).
 * [Capture script](https://github.com/Payum/Core/blob/master/Resources/docs/capture-script.md).
 * [Authorize script](https://github.com/Payum/Core/blob/master/Resources/docs/authorize-script.md).

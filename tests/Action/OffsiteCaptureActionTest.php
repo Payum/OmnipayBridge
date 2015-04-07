@@ -25,11 +25,11 @@ class OffsiteCaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\PaymentAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayAwareInterface'));
     }
 
     /**
@@ -61,7 +61,7 @@ class OffsiteCaptureActionTest extends GenericActionTest
 
         $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Capture($details));
     }
@@ -83,7 +83,7 @@ class OffsiteCaptureActionTest extends GenericActionTest
 
         $action = new OffsiteCaptureAction;
         $action->setApi($gatewayMock);
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Capture(array(
             '_status' => 'foo',

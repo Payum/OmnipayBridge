@@ -3,26 +3,26 @@ namespace Payum\OmnipayBridge\Action;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\PaymentAwareInterface;
-use Payum\Core\PaymentInterface;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\GetHttpRequest;
 
-class OffsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInterface
+class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInterface
 {
     /**
-     * @var PaymentInterface
+     * @var GatewayInterface
      */
-    protected $payment;
+    protected $gateway;
 
     /**
      * {@inheritDoc}
      */
-    public function setPayment(PaymentInterface $payment)
+    public function setGateway(GatewayInterface $gateway)
     {
-        $this->payment = $payment;
+        $this->gateway = $gateway;
     }
 
     /**
@@ -47,7 +47,7 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements PaymentAwareInt
         }
 
         if (false == $details['clientIp']) {
-            $this->payment->execute($httpRequest = new GetHttpRequest);
+            $this->gateway->execute($httpRequest = new GetHttpRequest);
 
             $details['clientIp'] = $httpRequest->clientIp;
         }

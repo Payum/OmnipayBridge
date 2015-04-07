@@ -4,19 +4,18 @@ namespace Payum\OmnipayBridge;
 use Omnipay\Omnipay;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Payment;
-use Payum\Core\PaymentFactory as CorePaymentFactory;
-use Payum\Core\PaymentFactoryInterface;
+use Payum\Core\GatewayFactory as CoreGatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\FillOrderDetailsAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
-class DirectPaymentFactory implements PaymentFactoryInterface
+class OmnipayDirectGatewayFactory implements GatewayFactoryInterface
 {
     /**
-     * @var PaymentFactoryInterface
+     * @var GatewayFactoryInterface
      */
-    protected $corePaymentFactory;
+    protected $coreGatewayFactory;
 
     /**
      * @var array
@@ -25,11 +24,11 @@ class DirectPaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param array $defaultConfig
-     * @param PaymentFactoryInterface $corePaymentFactory
+     * @param GatewayFactoryInterface $coreGatewayFactory
      */
-    public function __construct(array $defaultConfig = array(), PaymentFactoryInterface $corePaymentFactory = null)
+    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
     {
-        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
         $this->defaultConfig = $defaultConfig;
     }
 
@@ -38,7 +37,7 @@ class DirectPaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $config = array())
     {
-        return $this->corePaymentFactory->create($this->createConfig($config));
+        return $this->coreGatewayFactory->create($this->createConfig($config));
     }
 
     /**
@@ -48,7 +47,7 @@ class DirectPaymentFactory implements PaymentFactoryInterface
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
-        $config->defaults($this->corePaymentFactory->createConfig());
+        $config->defaults($this->coreGatewayFactory->createConfig());
         $config->defaults(array(
             'payum.action.capture' => new CaptureAction(),
             'payum.action.fill_order_details' => new FillOrderDetailsAction(),

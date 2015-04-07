@@ -25,11 +25,11 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldBeSubClassOfPaymentAwareAction()
+    public function shouldBeSubClassOfGatewayAwareAction()
     {
         $rc = new \ReflectionClass('Payum\OmnipayBridge\Action\CaptureAction');
 
-        $this->assertTrue($rc->isSubclassOf('Payum\Core\PaymentAwareInterface'));
+        $this->assertTrue($rc->isSubclassOf('Payum\Core\GatewayAwareInterface'));
     }
 
     /**
@@ -56,7 +56,7 @@ class CaptureActionTest extends GenericActionTest
 
         $action = new CaptureAction;
         $action->setApi($gatewayMock);
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Capture($details));
     }
@@ -78,7 +78,7 @@ class CaptureActionTest extends GenericActionTest
 
         $action = new CaptureAction;
         $action->setApi($gatewayMock);
-        $action->setPayment($this->createPaymentMock());
+        $action->setGateway($this->createGatewayMock());
 
         $action->execute(new Capture(array(
             '_status' => 'foo',
