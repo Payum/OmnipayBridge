@@ -2,10 +2,9 @@
 namespace Payum\OmnipayBridge;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Payment;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 
-class OffsitePaymentFactory extends DirectPaymentFactory
+class OmnipayOffsiteGatewayFactory extends OmnipayDirectGatewayFactory
 {
     /**
      * {@inheritDoc}

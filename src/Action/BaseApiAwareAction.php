@@ -12,7 +12,7 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
     /**
      * @var GatewayInterface
      */
-    protected $gateway;
+    protected $omnipayGateway;
 
     /**
      * {@inheritDoc}
@@ -23,6 +23,6 @@ abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
             throw new UnsupportedApiException('Not supported.');
         }
         
-        $this->gateway = $api;
+        $this->omnipayGateway = $api;
     }
 }

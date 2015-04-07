@@ -1,18 +1,18 @@
 <?php
 namespace Payum\OmnipayBridge\Tests;
 
-use Payum\OmnipayBridge\OffsitePaymentFactory;
+use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
 
-class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldImplementPaymentFactoryInterface()
+    public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\OffsitePaymentFactory');
+        $rc = new \ReflectionClass('Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory');
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\PaymentFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
     }
 
     /**
@@ -20,46 +20,46 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new OffsitePaymentFactory();
+        new OmnipayOffsiteGatewayFactory();
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePayment()
+    public function shouldAllowCreateGateway()
     {
-        $factory = new OffsitePaymentFactory();
+        $factory = new OmnipayOffsiteGatewayFactory();
 
-        $payment = $factory->create(array('type' => 'Dummy', 'options' => array(
+        $gateway = $factory->create(array('type' => 'Dummy', 'options' => array(
             'testMode' => true,
         )));
 
-        $this->assertInstanceOf('Payum\Core\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeNotEmpty('apis', $payment);
-        $this->assertAttributeNotEmpty('actions', $payment);
+        $this->assertAttributeNotEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('actions', $gateway);
 
-        $extensions = $this->readAttribute($payment, 'extensions');
+        $extensions = $this->readAttribute($gateway, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
     }
 
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentWithCustomGateway()
+    public function shouldAllowCreateGatewayWithCustomGateway()
     {
-        $factory = new OffsitePaymentFactory();
+        $factory = new OmnipayOffsiteGatewayFactory();
 
-        $payment = $factory->create(array(
+        $gateway = $factory->create(array(
             'payum.api' => $this->createGatewayMock(),
         ));
 
-        $this->assertInstanceOf('Payum\Core\Payment', $payment);
+        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
 
-        $this->assertAttributeNotEmpty('apis', $payment);
-        $this->assertAttributeNotEmpty('actions', $payment);
+        $this->assertAttributeNotEmpty('apis', $gateway);
+        $this->assertAttributeNotEmpty('actions', $gateway);
 
-        $extensions = $this->readAttribute($payment, 'extensions');
+        $extensions = $this->readAttribute($gateway, 'extensions');
         $this->assertAttributeNotEmpty('extensions', $extensions);
     }
 
@@ -71,7 +71,7 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldThrowIfRequiredOptionsNotPassed()
     {
-        $factory = new OffsitePaymentFactory();
+        $factory = new OmnipayOffsiteGatewayFactory();
 
         $factory->create();
     }
@@ -79,9 +79,9 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreatePaymentConfig()
+    public function shouldAllowCreateGatewayConfig()
     {
-        $factory = new OffsitePaymentFactory();
+        $factory = new OmnipayOffsiteGatewayFactory();
 
         $config = $factory->createConfig();
 
@@ -97,7 +97,7 @@ class OffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldThrowIfTypeNotValid()
     {
-        $factory = new OffsitePaymentFactory();
+        $factory = new OmnipayOffsiteGatewayFactory();
 
         $factory->create(array('type' => 'Invalid'));
     }
