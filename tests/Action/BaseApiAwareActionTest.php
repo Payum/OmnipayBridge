@@ -44,7 +44,7 @@ class BaseApiAwareActionTest extends \PHPUnit_Framework_TestCase
 
         $action->setApi($expectedApi);
 
-        $this->assertAttributeSame($expectedApi, 'gateway', $action);
+        $this->assertAttributeSame($expectedApi, 'omnipayGateway', $action);
     }
 
     /**

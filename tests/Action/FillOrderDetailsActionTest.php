@@ -17,7 +17,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
     {
         return array(
             array(new $this->requestClass(new Payment)),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'))),
             array(new $this->requestClass(new Payment, $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }

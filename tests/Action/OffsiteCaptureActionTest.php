@@ -1,7 +1,8 @@
 <?php
 namespace Payum\OmnipayBridge\Tests\Action;
 
-use Omnipay\Common\GatewayInterface;
+use Omnipay\Common\GatewayInterface as OmnipayGatewayInterface;
+use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
@@ -51,7 +52,7 @@ class OffsiteCaptureActionTest extends GenericActionTest
             ->will($this->returnValue($this->getMock('Omnipay\Common\Message\ResponseInterface')))
         ;
 
-        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock = $this->createOmnipayGatewayMock();
         $gatewayMock
             ->expects($this->once())
             ->method('purchase')
@@ -71,7 +72,7 @@ class OffsiteCaptureActionTest extends GenericActionTest
      */
     public function shouldDoNothingIfStatusAlreadySet()
     {
-        $gatewayMock = $this->createGatewayMock();
+        $gatewayMock = $this->createOmnipayGatewayMock();
         $gatewayMock
             ->expects($this->never())
             ->method('purchase')
@@ -91,10 +92,19 @@ class OffsiteCaptureActionTest extends GenericActionTest
     }
 
     /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|OmnipayGatewayInterface
+     */
+    protected function createOmnipayGatewayMock()
+    {
+        return $this->getMock('Payum\OmnipayBridge\Tests\DummyGateway');
+    }
+
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Payum\OmnipayBridge\Tests\DummyGateway');
+        return $this->getMock('Payum\Core\GatewayInterface');
     }
 }

@@ -53,11 +53,11 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInt
         }
 
         if (isset($details['_completeCaptureRequired'])) {
-            $response = $this->gateway->completePurchase($details->toUnsafeArray())->send();
+            $response = $this->omnipayGateway->completePurchase($details->toUnsafeArray())->send();
 
             unset($details['_completeCaptureRequired']);
         } else {
-            $response = $this->gateway->purchase($details->toUnsafeArray())->send();
+            $response = $this->omnipayGateway->purchase($details->toUnsafeArray())->send();
         }
 
         if ($response->isRedirect()) {
