@@ -2,6 +2,7 @@
 namespace Payum\OmnipayBridge\Tests\Action\Api;
 
 use Payum\Core\Model\CreditCard;
+use Payum\Core\Request\GetCurrency;
 use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Convert;
@@ -36,8 +37,22 @@ class ConvertPaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function shouldCorrectlyConvertPaymentToDetailsArray()
     {
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->willReturnCallback(function(GetCurrency $request) {
+                $request->name = 'US Dollar';
+                $request->alpha3 = 'USD';
+                $request->numeric = 123;
+                $request->exp = 2;
+                $request->country = 'US';
+            })
+        ;
+
         $payment = new Payment;
         $payment->setNumber('theNumber');
         $payment->setCurrencyCode('USD');
@@ -47,6 +62,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $payment->setClientEmail('theClientEmail');
 
         $action = new ConvertPaymentAction;
+        $action->setGateway($gatewayMock);
 
         $action->execute($convert = new Convert($payment, 'array'));
         $details = $convert->getResult();
@@ -66,8 +82,22 @@ class ConvertPaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldCorrectlyConvertOrderCreditCardToDetailsAndSetItBack()
+    public function shouldCorrectlyConvertPaymentWithCreditCardToDetailsArray()
     {
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->willReturnCallback(function(GetCurrency $request) {
+                $request->name = 'US Dollar';
+                $request->alpha3 = 'USD';
+                $request->numeric = 123;
+                $request->exp = 2;
+                $request->country = 'US';
+            })
+        ;
+
         $creditCard = new CreditCard();
         $creditCard->setNumber('4444333322221111');
         $creditCard->setHolder('John Doe');
@@ -84,6 +114,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $payment->setCreditCard($creditCard);
 
         $action = new ConvertPaymentAction;
+        $action->setGateway($gatewayMock);
 
         $action->execute($convert = new Convert($payment, 'array'));
         $details = $convert->getResult();
@@ -107,6 +138,20 @@ class ConvertPaymentActionTest extends GenericActionTest
      */
     public function shouldNotOverwriteAlreadySetExtraDetails()
     {
+        $gatewayMock = $this->getMock('Payum\Core\GatewayInterface');
+        $gatewayMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->isInstanceOf('Payum\Core\Request\GetCurrency'))
+            ->willReturnCallback(function(GetCurrency $request) {
+                $request->name = 'US Dollar';
+                $request->alpha3 = 'USD';
+                $request->numeric = 123;
+                $request->exp = 2;
+                $request->country = 'US';
+            })
+        ;
+
         $payment = new Payment;
         $payment->setCurrencyCode('USD');
         $payment->setTotalAmount(123);
@@ -116,6 +161,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         ));
 
         $action = new ConvertPaymentAction;
+        $action->setGateway($gatewayMock);
 
         $action->execute($convert = new Convert($payment, 'array'));
         $details = $convert->getResult();
