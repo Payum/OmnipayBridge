@@ -1,25 +1,29 @@
 <?php
 namespace Payum\OmnipayBridge\Action;
 
-use Payum\Core\Action\ActionInterface;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Model\PaymentInterface;
+use Payum\Core\Request\Convert;
+use Payum\Core\Request\GetCurrency;
 use Payum\Core\Security\SensitiveValue;
-use Payum\Offline\Constants;
 
-class FillOrderDetailsAction implements ActionInterface
+class ConvertPaymentAction extends GatewayAwareAction
 {
     /**
      * {@inheritDoc}
      *
-     * @param FillOrderDetails $request
+     * @param Convert $request
      */
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $payment = $request->getOrder();
-        $divisor = pow(10, $payment->getCurrencyDigitsAfterDecimalPoint());
+        /** @var PaymentInterface $payment */
+        $payment = $request->getSource();
+
+        $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
+        $divisor = pow(10, $currency->exp);
 
         $details = $payment->getDetails();
         $details['amount'] = (float) $payment->getTotalAmount() / $divisor;
@@ -39,7 +43,7 @@ class FillOrderDetailsAction implements ActionInterface
             ));
         }
 
-        $payment->setDetails($details);
+        $request->setResult((array) $details);
     }
 
     /**
@@ -47,6 +51,10 @@ class FillOrderDetailsAction implements ActionInterface
      */
     public function supports($request)
     {
-        return $request instanceof FillOrderDetails;
+        return
+            $request instanceof Convert &&
+            'array' == $request->getTo() &&
+            $request->getSource() instanceof PaymentInterface
+        ;
     }
 }

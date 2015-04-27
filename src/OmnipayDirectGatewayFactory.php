@@ -7,7 +7,7 @@ use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory as CoreGatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\Action\CaptureAction;
-use Payum\OmnipayBridge\Action\FillOrderDetailsAction;
+use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
 class OmnipayDirectGatewayFactory implements GatewayFactoryInterface
@@ -50,7 +50,7 @@ class OmnipayDirectGatewayFactory implements GatewayFactoryInterface
         $config->defaults($this->coreGatewayFactory->createConfig());
         $config->defaults(array(
             'payum.action.capture' => new CaptureAction(),
-            'payum.action.fill_order_details' => new FillOrderDetailsAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
         ));
 

@@ -2,23 +2,23 @@
 namespace Payum\OmnipayBridge\Tests\Action\Api;
 
 use Payum\Core\Model\CreditCard;
-use Payum\OmnipayBridge\Action\FillOrderDetailsAction;
+use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
-use Payum\Core\Request\FillOrderDetails;
+use Payum\Core\Request\Convert;
 use Payum\Core\Tests\GenericActionTest;
 
-class FillOrderDetailsActionTest extends GenericActionTest
+class ConvertPaymentActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Payum\OmnipayBridge\Action\FillOrderDetailsAction';
+    protected $actionClass = 'Payum\OmnipayBridge\Action\ConvertPaymentAction';
 
-    protected $requestClass = 'Payum\Core\Request\FillOrderDetails';
+    protected $requestClass = 'Payum\Core\Request\Convert';
 
     public function provideSupportedRequests()
     {
         return array(
-            array(new $this->requestClass(new Payment)),
-            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'))),
-            array(new $this->requestClass(new Payment, $this->getMock('Payum\Core\Security\TokenInterface'))),
+            array(new $this->requestClass(new Payment, 'array')),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'array')),
+            array(new $this->requestClass(new Payment, 'array', $this->getMock('Payum\Core\Security\TokenInterface'))),
         );
     }
 
@@ -29,6 +29,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
             array(array('foo')),
             array(new \stdClass()),
             array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\PaymentInterface'), 'notArray')),
         );
     }
 
@@ -45,11 +46,10 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $payment->setClientId('theClientId');
         $payment->setClientEmail('theClientEmail');
 
-        $action = new FillOrderDetailsAction;
+        $action = new ConvertPaymentAction;
 
-        $action->execute(new FillOrderDetails($payment));
-
-        $details = $payment->getDetails();
+        $action->execute($convert = new Convert($payment, 'array'));
+        $details = $convert->getResult();
 
         $this->assertNotEmpty($details);
 
@@ -83,11 +83,10 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $payment->setClientEmail('theClientEmail');
         $payment->setCreditCard($creditCard);
 
-        $action = new FillOrderDetailsAction;
+        $action = new ConvertPaymentAction;
 
-        $action->execute(new FillOrderDetails($payment));
-
-        $details = $payment->getDetails();
+        $action->execute($convert = new Convert($payment, 'array'));
+        $details = $convert->getResult();
 
         $this->assertNotEmpty($details);
 
@@ -116,11 +115,10 @@ class FillOrderDetailsActionTest extends GenericActionTest
             'foo' => 'fooVal',
         ));
 
-        $action = new FillOrderDetailsAction;
+        $action = new ConvertPaymentAction;
 
-        $action->execute(new FillOrderDetails($payment));
-
-        $details = $payment->getDetails();
+        $action->execute($convert = new Convert($payment, 'array'));
+        $details = $convert->getResult();
 
         $this->assertNotEmpty($details);
 
