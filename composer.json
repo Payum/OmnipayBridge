@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "payum/core": "1.0.*@ev",
+        "payum/core": "1.0.*@dev",
         "omnipay/common": "~2.0"
     },
     "require-dev": {
