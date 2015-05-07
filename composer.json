@@ -1,7 +1,7 @@
 {
     "name": "payum/omnipay-bridge",
     "type": "library",
-    "description": "This bridge allows you to use omnipay gateways but in payum like way.",
+    "description": "This  bridge allows you to use omnipay gateways but in payum like way.",
     "keywords": ["payment", "omnipay"],
     "homepage": "https://github.com/Payum/OmnipayBridge",
     "license": "MIT",
