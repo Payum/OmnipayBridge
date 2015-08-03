@@ -28,8 +28,9 @@ class CaptureAction extends OffsiteCaptureAction implements GatewayAwareInterfac
         if (false == isset($details['_completeCaptureRequired'])) {
             if (false == $details->validateNotEmpty(array('card'), false) && false == $details->validateNotEmpty(array('cardReference'), false)) {
                 try {
-                    $this->gateway->execute($creditCardRequest = new ObtainCreditCard);
-                    $card = $creditCardRequest->obtain();
+                    $obtainCreditCard = new ObtainCreditCard($request->getFirstModel(), $request->getModel());
+                    $this->gateway->execute($obtainCreditCard);
+                    $card = $obtainCreditCard->obtain();
 
                     $details['card'] = new SensitiveValue(array(
                         'number' => $card->getNumber(),
