@@ -11,9 +11,12 @@ matrix:
   allow_failures:
     - php: hhvm
 
-before_script:
-  - php composer.phar --prefer-stable install
+before_install:
+    - composer self-update
+
+install:
+    - composer --prefer-source install
 
 notifications:
   email:
-    - crevillo@gmail.com
+    - payumsupport@forma-pro.com
