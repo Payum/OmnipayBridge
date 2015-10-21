@@ -55,8 +55,12 @@ class OmnipayDirectGatewayFactory implements GatewayFactoryInterface
         ));
 
         if (false == $config['payum.api']) {
+            $config['payum.default_options'] = array(
+                'type' => null,
+                'options' => [],
+            );
+            $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array('type');
-            $config->defaults(array('options' => array()));
 
             $config['payum.api.gateway'] = function(ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
