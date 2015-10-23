@@ -52,7 +52,7 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInt
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['_status']) {
+        if ($details['_status'] || $details['_captureCompleted']) {
             return;
         }
 
@@ -81,12 +81,13 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInt
 
         if (
             $details['_completeCaptureRequired'] &&
-            false == $details['_captureCompleted'] &&
             method_exists($this->omnipayGateway, 'completePurchase')
         ) {
-            $response = $this->omnipayGateway->completePurchase($details->toUnsafeArray())->send();
+            if (false == $details['_captureCompleted']) {
+                $response = $this->omnipayGateway->completePurchase($details->toUnsafeArray())->send();
 
-            $details['_captureCompleted'] = true;
+                $details['_captureCompleted'] = true;
+            }
         } else {
             $response = $this->omnipayGateway->purchase($details->toUnsafeArray())->send();
         }

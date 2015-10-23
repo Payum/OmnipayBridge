@@ -8,6 +8,7 @@ use Omnipay\Omnipay;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\GatewayFactory;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
@@ -31,7 +32,7 @@ class OmnipayUniversalGatewayFactory extends GatewayFactory
      * @param string $omnipayGatewayTypeOrClass
      * @param OmnipayGatewayFactory|null $omnipayGatewayFactory
      */
-    public function __construct($omnipayGatewayTypeOrClass, OmnipayGatewayFactory $omnipayGatewayFactory = null, array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
+    public function __construct($omnipayGatewayTypeOrClass = null, OmnipayGatewayFactory $omnipayGatewayFactory = null, array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
     {
         parent::__construct($defaultConfig, $coreGatewayFactory);
 
@@ -52,22 +53,34 @@ class OmnipayUniversalGatewayFactory extends GatewayFactory
         ]);
 
         if (false == $config['payum.api']) {
-            try {
-                /** @var GatewayInterface $gateway */
-                $gateway = $this->omnipayGatewayFactory->create($this->omnipayGatewayTypeOrClass, $config['guzzle.client']);
-            } catch (OmnipayException $e) {
-                throw new LogicException(sprintf(
-                    'Given omnipay gateway type %s or class is not supported. Supported: %s',
-                    $this->omnipayGatewayTypeOrClass,
-                    implode(', ', $this->omnipayGatewayFactory->getSupportedGateways())
-                ));
+            //BC layer
+            if ($config['options']) {
+                $config->defaults($config['options']);
             }
 
-            // omnipay does not provide required options.
-            $config['payum.required_options'] = [];
+            $config->defaults([
+                'type' => $this->omnipayGatewayTypeOrClass,
+            ]);
 
-            $config['payum.default_options'] = array_replace(['testMode' => true], $gateway->getDefaultParameters());
-            $config->defaults($config['payum.default_options']);
+            // omnipay does not provide required options.
+            $config['payum.required_options'] = ['type'];
+
+            $gateway = null;
+            if ($config['type']) {
+                try {
+                    /** @var GatewayInterface $gateway */
+                    $gateway = $this->omnipayGatewayFactory->create($config['type']);
+                } catch (OmnipayException $e) {
+                    throw new LogicException(sprintf(
+                        'Given omnipay gateway type %s or class is not supported. Supported: %s',
+                        $config['type'],
+                        implode(', ', $this->omnipayGatewayFactory->getSupportedGateways())
+                    ));
+                }
+
+                $config['payum.default_options'] = array_replace(['testMode' => true], $gateway->getDefaultParameters());
+                $config->defaults($config['payum.default_options']);
+            }
 
             $config['payum.api'] = function (ArrayObject $config) use ($gateway) {
                 $config->validateNotEmpty($config['payum.required_options']);

@@ -31,14 +31,18 @@ class CaptureAction extends OffsiteCaptureAction
                     $this->gateway->execute($obtainCreditCard);
                     $card = $obtainCreditCard->obtain();
 
-                    $details['card'] = new SensitiveValue(array(
-                        'number' => $card->getNumber(),
-                        'cvv' => $card->getSecurityCode(),
-                        'expiryMonth' => $card->getExpireAt()->format('m'),
-                        'expiryYear' => $card->getExpireAt()->format('y'),
-                        'firstName' => $card->getHolder(),
-                        'lastName' => '',
-                    ));
+                    if ($card->getToken()) {
+                        $details['cardReference'] = $card->getToken();
+                    } else {
+                        $details['card'] = new SensitiveValue(array(
+                            'number' => $card->getNumber(),
+                            'cvv' => $card->getSecurityCode(),
+                            'expiryMonth' => $card->getExpireAt()->format('m'),
+                            'expiryYear' => $card->getExpireAt()->format('y'),
+                            'firstName' => $card->getHolder(),
+                            'lastName' => '',
+                        ));
+                    }
                 } catch (RequestNotSupportedException $e) {
                     throw new LogicException('Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.');
                 }
