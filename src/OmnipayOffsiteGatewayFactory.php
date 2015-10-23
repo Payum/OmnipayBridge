@@ -4,18 +4,20 @@ namespace Payum\OmnipayBridge;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 
+/**
+ * @deprecated since 1.0.0-BETA1
+ */
 class OmnipayOffsiteGatewayFactory extends OmnipayDirectGatewayFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
-        $config = ArrayObject::ensureArrayObject($config);
-        $config->defaults(array(
+        $config->defaults([
             'payum.action.capture' => new OffsiteCaptureAction(),
-        ));
+        ]);
 
-        return parent::createConfig((array) $config);
+        return parent::populateConfig($config);
     }
 }

@@ -4,12 +4,11 @@ namespace Payum\OmnipayBridge\Action;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureAction extends OffsiteCaptureAction implements GatewayAwareInterface
+class CaptureAction extends OffsiteCaptureAction
 {
     /**
      * {@inheritDoc}
@@ -25,7 +24,7 @@ class CaptureAction extends OffsiteCaptureAction implements GatewayAwareInterfac
             return;
         }
 
-        if (false == isset($details['_completeCaptureRequired'])) {
+        if (false == $details['_completeCaptureRequired']) {
             if (false == $details->validateNotEmpty(array('card'), false) && false == $details->validateNotEmpty(array('cardReference'), false)) {
                 try {
                     $obtainCreditCard = new ObtainCreditCard($request->getFirstModel(), $request->getModel());
@@ -47,5 +46,18 @@ class CaptureAction extends OffsiteCaptureAction implements GatewayAwareInterfac
         }
 
         parent::execute($request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function supports($request)
+    {
+        return
+            $request instanceof Capture &&
+            $request->getModel() instanceof \ArrayAccess &&
+            method_exists($this->omnipayGateway, 'purchase') &&
+            false == method_exists($this->omnipayGateway, 'completePurchase')
+        ;
     }
 }

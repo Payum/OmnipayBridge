@@ -17,53 +17,46 @@ php composer.phar require "payum/omnipay-bridge:*@stable"
 
 We have to only add a the gateway factory. All the rest remain the same:
 
+## config.php
+
 ```php
 <?php
 //config.php
 
-// ...
+use Payum\Core\PayumBuilder;
+use Payum\Core\Payum;
 
-// direct payment like Stripe or Authorize.Net
+/** @var Payum $payum */
+$payum = (new PayumBuilder())
+    ->addDefaultStorages()
 
-$directOmnipayFactory = new Payum\OmnipayBridge\DirectGatewayFactory();
-$gateways['stripe_omnipay'] = $directOmnipayFactory->create(array(
-    'type' => 'Stripe',
-    'options' => array('apiKey' => 'REPLACE IT', 'testMode' => true),
-));
+    // direct payment like Stripe or Authorize.Net
 
-
-// or offsite payment like Paypal ExpressCheckout
-
-$offsiteOmnipayFactory = new Payum\OmnipayBridge\OffsiteGatewayFactory();
-$gateways['paypal_omnipay'] = $offsiteOmnipayFactory->create(array(
-    'type' => 'PayPal_Express',
-    'options' => array(
-        'username' => 'REPLACE IT', 
+    ->addGateway('gatewayName', [
+        'factory' => 'Omnipay_Stripe',
+        'username' => 'REPLACE IT',
         'password' => 'REPLACE IT',
         'signature' => 'REPLACE IT',
         'testMode' => true
-    ),
-));
+    ])
+
+    // or offsite payment like Paypal ExpressCheckout
+
+    ->addGateway('gatewayName', [
+        'factory' => 'Omnipay_PayPal_Express',
+        'username' => 'REPLACE IT',
+        'password' => 'REPLACE IT',
+        'signature' => 'REPLACE IT',
+        'testMode' => true
+    ])
+
+    ->getPayum()
+;
 ```
 
 ## prepare.php
 
-Here you have to modify a `gatewayName` value. Set it to `stripe_omnipay` or `paypal_omnipay` or any other you configure.
-The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
-If you have to pass a credit card just add it to the Order like this:
-
-```
-use Payum\Core\Model\CreditCard;
-
-// ...
-
-$card = new CreditCard();
-$card->setNumber('4111111111111111');
-$card->setExpireAt(new \DateTime('2018-10-10'));
-$card->setSecurityCode(123);
-
-$payment->setCreditCard($card);
-```
+Here you have to modify the `gatewayName` value. Set it to `paypal_express_checkout` or `stripe`. The rest remain the same as described basic [get it started](https://github.com/Payum/Core/blob/master/Resources/docs/get-it-started.md) documentation.
 
 ## Next
 
