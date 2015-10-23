@@ -33,7 +33,7 @@ $payum = (new PayumBuilder())
     // direct payment like Stripe or Authorize.Net
 
     ->addGateway('gatewayName', [
-        'factory' => 'Omnipay_Stripe',
+        'factory' => 'omnipay_stripe',
         'username' => 'REPLACE IT',
         'password' => 'REPLACE IT',
         'signature' => 'REPLACE IT',
@@ -43,7 +43,7 @@ $payum = (new PayumBuilder())
     // or offsite payment like Paypal ExpressCheckout
 
     ->addGateway('gatewayName', [
-        'factory' => 'Omnipay_PayPal_Express',
+        'factory' => 'omnipay_paypal_express',
         'username' => 'REPLACE IT',
         'password' => 'REPLACE IT',
         'signature' => 'REPLACE IT',

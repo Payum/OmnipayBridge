@@ -4,7 +4,7 @@ namespace Payum\OmnipayBridge\Tests\Functional;
 use Payum\Core\Request\GetHumanStatus;
 use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
 use Payum\Core\Request\Capture;
-use Payum\OmnipayBridge\OmnipayUniversalGatewayFactory;
+use Payum\OmnipayBridge\OmnipayGatewayFactory;
 
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishSuccessfully()
     {
-        $factory = new OmnipayUniversalGatewayFactory('Dummy');
+        $factory = new OmnipayGatewayFactory('Dummy');
 
         $gateway = $factory->create([]);
 
@@ -44,7 +44,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishWithFailed()
     {
-        $factory = new OmnipayUniversalGatewayFactory('Dummy');
+        $factory = new OmnipayGatewayFactory('Dummy');
 
         $gateway = $factory->create([]);
 

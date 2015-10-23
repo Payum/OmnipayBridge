@@ -2,7 +2,7 @@
 namespace Payum\OmnipayBridge;
 
 use Omnipay\Common\Exception\OmnipayException;
-use Omnipay\Common\GatewayFactory as OmnipayGatewayFactory;
+use Omnipay\Common\GatewayFactory as OmnipayOmnipayGatewayFactory;
 use Omnipay\Common\GatewayInterface;
 use Omnipay\Omnipay;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -14,7 +14,7 @@ use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
-class OmnipayUniversalGatewayFactory extends GatewayFactory
+class OmnipayGatewayFactory extends GatewayFactory
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ class OmnipayUniversalGatewayFactory extends GatewayFactory
     private $omnipayGatewayTypeOrClass;
 
     /**
-     * @var OmnipayGatewayFactory|null
+     * @var OmnipayOmnipayGatewayFactory|null
      */
     private $omnipayGatewayFactory;
 
@@ -30,9 +30,9 @@ class OmnipayUniversalGatewayFactory extends GatewayFactory
      * {@inheritDoc}
      *
      * @param string $omnipayGatewayTypeOrClass
-     * @param OmnipayGatewayFactory|null $omnipayGatewayFactory
+     * @param OmnipayOmnipayGatewayFactory|null $omnipayGatewayFactory
      */
-    public function __construct($omnipayGatewayTypeOrClass = null, OmnipayGatewayFactory $omnipayGatewayFactory = null, array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
+    public function __construct($omnipayGatewayTypeOrClass = null, OmnipayOmnipayGatewayFactory $omnipayGatewayFactory = null, array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
     {
         parent::__construct($defaultConfig, $coreGatewayFactory);
 
