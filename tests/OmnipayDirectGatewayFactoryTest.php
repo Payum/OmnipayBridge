@@ -2,6 +2,8 @@
 namespace Payum\OmnipayBridge\Tests;
 
 use Omnipay\Common\GatewayInterface;
+use Payum\Core\Gateway;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\OmnipayDirectGatewayFactory;
 
 class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
@@ -11,9 +13,9 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\OmnipayDirectGatewayFactory');
+        $rc = new \ReflectionClass(OmnipayDirectGatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
     /**
@@ -35,7 +37,7 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
             'testMode' => true,
         )));
 
-        $this->assertInstanceOf('Payum\Core\Gateway', $gateway);
+        $this->assertInstanceOf(Gateway::class, $gateway);
 
         $this->assertAttributeNotEmpty('apis', $gateway);
         $this->assertAttributeNotEmpty('actions', $gateway);
@@ -71,7 +73,7 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new OmnipayDirectGatewayFactory();
 
-        $config = $factory->createConfig();
+        $config = $factory->createConfig(['type' => 'Dummy']);
 
         $this->assertInternalType('array', $config);
         $this->assertNotEmpty($config);
@@ -94,7 +96,7 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Given type Invalid is not supported. Try one of supported types: Dummy.
+     * @expectedExceptionMessage Given omnipay gateway type Invalid or class is not supported. Supported:
      */
     public function shouldThrowIfTypeNotValid()
     {

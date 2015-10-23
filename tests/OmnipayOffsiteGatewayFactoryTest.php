@@ -1,6 +1,8 @@
 <?php
 namespace Payum\OmnipayBridge\Tests;
 
+use Omnipay\Common\GatewayInterface as OmnipayGatewayInterface;
+use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory;
 
 class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
@@ -10,9 +12,9 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldImplementGatewayFactoryInterface()
     {
-        $rc = new \ReflectionClass('Payum\OmnipayBridge\OmnipayOffsiteGatewayFactory');
+        $rc = new \ReflectionClass(OmnipayOffsiteGatewayFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('Payum\Core\GatewayFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(GatewayFactoryInterface::class));
     }
 
     /**
@@ -93,7 +95,7 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Given type Invalid is not supported. Try one of supported types: Dummy.
+     * @expectedExceptionMessage Given omnipay gateway type Invalid or class is not supported. Supported:
      */
     public function shouldThrowIfTypeNotValid()
     {
@@ -103,10 +105,10 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|OmnipayGatewayInterface
      */
     protected function createGatewayMock()
     {
-        return $this->getMock('Omnipay\Common\GatewayInterface');
+        return $this->getMock(OmnipayGatewayInterface::class);
     }
 }
