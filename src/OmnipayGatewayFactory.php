@@ -75,7 +75,7 @@ class OmnipayGatewayFactory extends GatewayFactory
                         'Given omnipay gateway type %s or class is not supported. Supported: %s',
                         $config['type'],
                         implode(', ', $this->omnipayGatewayFactory->getSupportedGateways())
-                    ));
+                    ), 0, $e);
                 }
 
                 $config['payum.default_options'] = array_replace(['testMode' => true], $gateway->getDefaultParameters());
