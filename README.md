@@ -65,7 +65,7 @@ Well more or less same amount of code but with the bridge you get more out of th
 * You can use Payum's packages for Symfony,Laravel,Silex,Zend,Yii with the bridge.
 * Storages. Your payment is already stored on the filesystem. We advice not to use this storage in prod.
 * The payment model contains all the information we were able to get from omnipay. Just use it.
-* Payum abstract workflow. It knows when Omnipay's `purchase` or `purchaseComplete` methods should be used.
+* Payum abstracts workflow. It knows when Omnipay's `purchase` or `purchaseComplete` methods should be used.
 * Credit card details are protected from accidental storing on your side.
 
 ## Resources
