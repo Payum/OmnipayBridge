@@ -1,6 +1,6 @@
 ## Why should you use this bridge?
 
-Here's an example from omnipay's repository:
+Here's an [example from omnipay's repository](https://github.com/thephpleague/omnipay#tldr):
 
 ```php
 <?php
