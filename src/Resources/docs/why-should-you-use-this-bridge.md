@@ -61,5 +61,6 @@ Well more or less same amount of code but with the bridge you get more out of th
 * The payment model contains all the information we were able to get from omnipay. Just use it.
 * Payum abstracts workflow. It knows when Omnipay's `purchase` or `purchaseComplete` methods should be used.
 * Credit card details are protected from accidental storing on your side.
+* Using the builder you can overwrite any part you want, or add a Payum extension.
 
 Back to [index](index.md).
