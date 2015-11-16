@@ -6,7 +6,7 @@ This bridge allows you to use omnipay gateways but in payum like way.
 
 ## Resources
 
-* [Why should you use this bridge?](http://payum.org/doc/1.1/OmnipayBridge/why-should-you-use-this-bridge.md)
+* [Why should you use this bridge?](http://payum.org/doc/1.1/OmnipayBridge/why-should-you-use-this-bridge)
 * [Documentation](http://payum.org/doc#OmnipayBridge)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
