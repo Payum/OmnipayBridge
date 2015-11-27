@@ -81,6 +81,21 @@ class OmnipayDirectGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldContainCaptureActionAndMissCaptureOffsiteAction()
+    {
+        $factory = new OmnipayDirectGatewayFactory();
+
+        $config = $factory->createConfig(['type' => 'Dummy']);
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('payum.action.capture', $config);
+        $this->assertArrayNotHasKey('payum.action.capture_offsite', $config);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage The type fields are required.

@@ -93,6 +93,21 @@ class OmnipayOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function shouldContainCaptureOffsiteActionAndMissCaptureAction()
+    {
+        $factory = new OmnipayOffsiteGatewayFactory();
+
+        $config = $factory->createConfig(['type' => 'Dummy']);
+
+        $this->assertInternalType('array', $config);
+
+        $this->assertArrayHasKey('payum.action.capture_offsite', $config);
+        $this->assertArrayNotHasKey('payum.action.capture', $config);
+    }
+
+    /**
+     * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
      * @expectedExceptionMessage Given omnipay gateway type Invalid or class is not supported. Supported:
