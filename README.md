@@ -71,8 +71,7 @@ Well more or less same amount of code but with the bridge you get more out of th
 
 ## Resources
 
-* [Why should you use this bridge?](http://payum.org/doc/1.1/OmnipayBridge/why-should-you-use-this-bridge)
-* [Documentation](http://payum.org/doc#OmnipayBridge)
+* [Documentation](https://github.com/Payum/Payum/blob/master/src/Payum/Core/Resources/docs/index.md)
 * [Questions](http://stackoverflow.com/questions/tagged/payum)
 * [Issue Tracker](https://github.com/Payum/Payum/issues)
 * [Twitter](https://twitter.com/payumphp)
