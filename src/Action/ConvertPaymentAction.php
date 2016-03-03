@@ -33,7 +33,7 @@ class ConvertPaymentAction extends GatewayAwareAction
         if ($payment->getCreditCard()) {
             $card = $payment->getCreditCard();
 
-            $details['card'] = new SensitiveValue(array(
+            $details['card'] = SensitiveValue::ensureSensitive(array(
                 'number' => $card->getNumber(),
                 'cvv' => $card->getSecurityCode(),
                 'expiryMonth' => $card->getExpireAt()->format('m'),

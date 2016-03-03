@@ -3,6 +3,7 @@ namespace Payum\OmnipayBridge\Tests\Action\Api;
 
 use Payum\Core\Model\CreditCard;
 use Payum\Core\Request\GetCurrency;
+use Payum\Core\Security\SensitiveValue;
 use Payum\OmnipayBridge\Action\ConvertPaymentAction;
 use Payum\Core\Model\Payment;
 use Payum\Core\Request\Convert;
@@ -122,7 +123,7 @@ class ConvertPaymentActionTest extends GenericActionTest
         $this->assertNotEmpty($details);
 
         $this->assertArrayHasKey('card', $details);
-        $this->assertInstanceOf('Payum\Core\Security\SensitiveValue', $details['card']);
+        $this->assertInstanceOf(SensitiveValue::class, $details['card']);
         $this->assertEquals(array(
             'number' => '4444333322221111',
             'cvv' => '322',

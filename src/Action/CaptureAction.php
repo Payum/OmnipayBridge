@@ -34,7 +34,7 @@ class CaptureAction extends OffsiteCaptureAction
                     if ($card->getToken()) {
                         $details['cardReference'] = $card->getToken();
                     } else {
-                        $details['card'] = new SensitiveValue(array(
+                        $details['card'] = SensitiveValue::ensureSensitive(array(
                             'number' => $card->getNumber(),
                             'cvv' => $card->getSecurityCode(),
                             'expiryMonth' => $card->getExpireAt()->format('m'),
