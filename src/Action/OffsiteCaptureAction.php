@@ -114,7 +114,12 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInt
             }
         }
 
-        $details->replace($response->getData());
+        if (is_array($response->getData())) {
+            $details->replace($response->getData());
+        } else {
+            $details['_data'] = $response->getData();
+        }
+
         $details['_reference']      = $response->getTransactionReference();
         $details['_status']         = $response->isSuccessful() ? 'captured' : 'failed';
         $details['_status_code']    = $response->getCode();

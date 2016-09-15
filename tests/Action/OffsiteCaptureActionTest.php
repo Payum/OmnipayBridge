@@ -443,6 +443,132 @@ class OffsiteCaptureActionTest extends GenericActionTest
     }
 
     /**
+     * @test
+     */
+    public function shouldMergeResponseArrayDataWithDetails()
+    {
+        $details = new \ArrayObject([
+            'card' => array('cvv' => 123),
+            'clientIp' => '',
+        ]);
+
+        $responseMock = $this->getMock(OmnipayAbstractResponse::class, [], [], '', false);
+        $responseMock
+            ->expects($this->any())
+            ->method('getData')
+            ->willReturn([
+                'foo' => 'fooVal',
+            ])
+        ;
+
+        $requestMock = $this->getMock(OmnipayRequestInterface::class);
+        $requestMock
+            ->expects($this->any())
+            ->method('send')
+            ->will($this->returnValue($responseMock))
+        ;
+
+        $omnipayGateway = $this->getMock(OffsiteGateway::class);
+        $omnipayGateway
+            ->expects($this->once())
+            ->method('purchase')
+            ->willReturn($requestMock)
+        ;
+
+        $captureToken = new Token();
+        $captureToken->setTargetUrl('theCaptureUrl');
+        $captureToken->setDetails($identity = new Identity('theId', new \stdClass()));
+        $captureToken->setGatewayName('theGatewayName');
+
+        $notifyToken = new Token();
+        $notifyToken->setTargetUrl('theNotifyUrl');
+
+        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createNotifyToken')
+            ->with('theGatewayName', $this->identicalTo($identity))
+            ->willReturn($notifyToken)
+        ;
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action = new OffsiteCaptureAction;
+        $action->setApi($omnipayGateway);
+        $action->setGateway($this->createGatewayMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $action->execute($request);
+
+        $details = (array) $details;
+        $this->assertArrayHasKey('foo', $details);
+        $this->assertEquals('fooVal', $details['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetResponseStringDataToDetails()
+    {
+        $details = new \ArrayObject([
+            'card' => array('cvv' => 123),
+            'clientIp' => '',
+        ]);
+
+        $responseMock = $this->getMock(OmnipayAbstractResponse::class, [], [], '', false);
+        $responseMock
+            ->expects($this->any())
+            ->method('getData')
+            ->willReturn('someData')
+        ;
+
+        $requestMock = $this->getMock(OmnipayRequestInterface::class);
+        $requestMock
+            ->expects($this->any())
+            ->method('send')
+            ->will($this->returnValue($responseMock))
+        ;
+
+        $omnipayGateway = $this->getMock(OffsiteGateway::class);
+        $omnipayGateway
+            ->expects($this->once())
+            ->method('purchase')
+            ->willReturn($requestMock)
+        ;
+
+        $captureToken = new Token();
+        $captureToken->setTargetUrl('theCaptureUrl');
+        $captureToken->setDetails($identity = new Identity('theId', new \stdClass()));
+        $captureToken->setGatewayName('theGatewayName');
+
+        $notifyToken = new Token();
+        $notifyToken->setTargetUrl('theNotifyUrl');
+
+        $tokenFactoryMock = $this->getMock(GenericTokenFactoryInterface::class);
+        $tokenFactoryMock
+            ->expects($this->once())
+            ->method('createNotifyToken')
+            ->with('theGatewayName', $this->identicalTo($identity))
+            ->willReturn($notifyToken)
+        ;
+
+        $request = new Capture($captureToken);
+        $request->setModel($details);
+
+        $action = new OffsiteCaptureAction;
+        $action->setApi($omnipayGateway);
+        $action->setGateway($this->createGatewayMock());
+        $action->setGenericTokenFactory($tokenFactoryMock);
+
+        $action->execute($request);
+
+        $details = (array) $details;
+        $this->assertArrayHasKey('_data', $details);
+        $this->assertEquals('someData', $details['_data']);
+    }
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|GatewayInterface
      */
     protected function createGatewayMock()
