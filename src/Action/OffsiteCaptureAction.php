@@ -114,10 +114,11 @@ class OffsiteCaptureAction extends BaseApiAwareAction implements GatewayAwareInt
             }
         }
 
-        if (is_array($response->getData())) {
-            $details->replace($response->getData());
+        $data = $response->getData();
+        if (is_array($data)) {
+            $details->replace($data);
         } else {
-            $details['_data'] = $response->getData();
+            $details['_data'] = $data;
         }
 
         $details['_reference']      = $response->getTransactionReference();
