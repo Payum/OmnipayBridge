@@ -11,6 +11,7 @@ use Payum\Core\GatewayFactory;
 use Payum\Core\GatewayFactoryInterface;
 use Payum\OmnipayBridge\Action\CaptureAction;
 use Payum\OmnipayBridge\Action\ConvertPaymentAction;
+use Payum\OmnipayBridge\Action\NotifyAction;
 use Payum\OmnipayBridge\Action\OffsiteCaptureAction;
 use Payum\OmnipayBridge\Action\StatusAction;
 
@@ -50,6 +51,7 @@ class OmnipayGatewayFactory extends GatewayFactory
             'payum.action.capture_offsite' => new OffsiteCaptureAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.status' => new StatusAction(),
+            'payum.action.notify' => new NotifyAction(),
         ]);
 
         if (false == $config['payum.api']) {
