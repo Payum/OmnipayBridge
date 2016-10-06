@@ -27,13 +27,8 @@ class NotifyAction extends BaseApiAwareAction implements GatewayAwareInterface
 
         $response = $this->omnipayGateway->fetchTransaction($details->toUnsafeArray())->send();
 
-        $data = $response->getData();
+        $details->replace((array)$response->getData());
 
-        if (is_array($data)) {
-            $details->replace($data);
-        }
-
-        $details['_reference'] = $response->getTransactionReference();
         $details['_status'] = $response->isSuccessful() ? 'captured' : 'failed';
         $details['_status_code'] = $response->getCode();
         $details['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
@@ -48,7 +43,8 @@ class NotifyAction extends BaseApiAwareAction implements GatewayAwareInterface
     {
         return
             $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess
+            $request->getModel() instanceof \ArrayAccess &&
+            method_exists($this->omnipayGateway, 'fetchTransaction')
         ;
     }
 }
