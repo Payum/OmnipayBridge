@@ -18,6 +18,8 @@ class NotifyActionTest extends GenericActionTest
 {
     protected $actionClass = NotifyAction::class;
 
+    protected $requestClass = Notify::class;
+
     protected function setUp()
     {
         $this->action = new $this->actionClass();
