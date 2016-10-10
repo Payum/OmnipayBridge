@@ -2,19 +2,26 @@
 
 namespace Payum\OmnipayBridge\Action;
 
+use Omnipay\Common\GatewayInterface;
+use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 
 /**
  * @author Steffen Brem <steffenbrem@gmail.com>
  */
-class NotifyAction extends BaseApiAwareAction implements GatewayAwareInterface
+class NotifyAction implements ApiAwareInterface, ActionInterface
 {
-    use GatewayAwareTrait;
+    use ApiAwareTrait;
+
+    public function __construct()
+    {
+        $this->apiClass = GatewayInterface::class;
+    }
 
     /**
      * {@inheritdoc}
@@ -25,7 +32,11 @@ class NotifyAction extends BaseApiAwareAction implements GatewayAwareInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $response = $this->omnipayGateway->fetchTransaction($details->toUnsafeArray())->send();
+        if (method_exists($this->api, 'fetchTransaction')) {
+            $response = $this->api->fetchTransaction($details->toUnsafeArray())->send();
+        } else if (method_exists($this->api, 'acceptNotification')) {
+            $response = $this->api->acceptNotification($details->toUnsafeArray())->send();
+        }
 
         $details->replace((array)$response->getData());
 
@@ -43,8 +54,10 @@ class NotifyAction extends BaseApiAwareAction implements GatewayAwareInterface
     {
         return
             $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess &&
-            method_exists($this->omnipayGateway, 'fetchTransaction')
+            $request->getModel() instanceof \ArrayAccess && (
+                method_exists($this->api, 'fetchTransaction') ||
+                method_exists($this->api, 'acceptNotification')
+            )
         ;
     }
 }
