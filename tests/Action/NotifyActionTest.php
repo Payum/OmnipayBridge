@@ -9,7 +9,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
 use Payum\OmnipayBridge\Action\NotifyAction;
-use Payum\OmnipayBridge\Tests\MollieGateway;
+use Payum\OmnipayBridge\Tests\OffsiteGateway;
 
 /**
  * @author Steffen Brem <steffenbrem@gmail.com>
@@ -23,7 +23,7 @@ class NotifyActionTest extends GenericActionTest
     protected function setUp()
     {
         $this->action = new $this->actionClass();
-        $this->action->setApi(new MollieGateway());
+        $this->action->setApi(new OffsiteGateway());
     }
 
     /**
@@ -48,8 +48,8 @@ class NotifyActionTest extends GenericActionTest
 
         $action = new NotifyAction();
 
-        $gateway = new MollieGateway();
-        $gateway->returnFetchTransaction = $requestMock;
+        $gateway = new OffsiteGateway();
+        $gateway->returnOnCompletePurchase = $requestMock;
         $action->setApi($gateway);
 
         try {
@@ -85,8 +85,8 @@ class NotifyActionTest extends GenericActionTest
 
         $action = new NotifyAction();
 
-        $gateway = new MollieGateway();
-        $gateway->returnFetchTransaction = $requestMock;
+        $gateway = new OffsiteGateway();
+        $gateway->returnOnCompletePurchase = $requestMock;
         $action->setApi($gateway);
 
         try {
