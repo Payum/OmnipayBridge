@@ -32,8 +32,8 @@ class NotifyAction implements ApiAwareInterface, ActionInterface
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (method_exists($this->api, 'fetchTransaction')) {
-            $response = $this->api->fetchTransaction($details->toUnsafeArray())->send();
+        if (method_exists($this->api, 'completePurchase')) {
+            $response = $this->api->completePurchase($details->toUnsafeArray())->send();
         } else if (method_exists($this->api, 'acceptNotification')) {
             $response = $this->api->acceptNotification($details->toUnsafeArray())->send();
         }
@@ -55,7 +55,7 @@ class NotifyAction implements ApiAwareInterface, ActionInterface
         return
             $request instanceof Notify &&
             $request->getModel() instanceof \ArrayAccess && (
-                method_exists($this->api, 'fetchTransaction') ||
+                method_exists($this->api, 'completePurchase') ||
                 method_exists($this->api, 'acceptNotification')
             )
         ;
