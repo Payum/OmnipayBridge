@@ -39,7 +39,7 @@ class NotifyAction implements ApiAwareInterface, ActionInterface
         }
 
         $details->replace((array)$response->getData());
-
+        // Did you plan manage Cancelled status ?
         $details['_status'] = $response->isSuccessful() ? 'captured' : 'failed';
         $details['_status_code'] = $response->getCode();
         $details['_status_message'] = $response->isSuccessful() ? '' : $response->getMessage();
