@@ -20,7 +20,7 @@ $stripeGateway->setTestMode(true);
 /** @var Payum $payum */
 $payum = (new PayumBuilder())
     ->addGateway('gatewayName', [
-        'factory' => 'Omnipay',
+        'factory' => 'omnipay',
         'payum.api' => $stripeGateway,
     ])
 ;
