@@ -35,7 +35,7 @@ use Payum\Core\Model\ArrayObject;
 
 $payum = (new PayumBuilder())
     ->addDefaultStorages()
-    ->addGateway('stripe', ['factory' => 'omnipay_stripe', 'apiKey' => 'abc123'])
+    ->addGateway('stripe', ['factory' => 'omnipay', 'type' => 'stripe', 'apiKey' => 'abc123'])
     ->getPayum()
 ;
 

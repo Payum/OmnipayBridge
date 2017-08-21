@@ -29,24 +29,6 @@ class OmnipayGatewayFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldAllowCreateGatewayWithTypeGivenInConstructor()
-    {
-        $factory = new OmnipayGatewayFactory('Dummy');
-
-        $gateway = $factory->create([]);
-
-        $this->assertInstanceOf(Gateway::class, $gateway);
-
-        $this->assertAttributeNotEmpty('apis', $gateway);
-        $this->assertAttributeNotEmpty('actions', $gateway);
-
-        $extensions = $this->readAttribute($gateway, 'extensions');
-        $this->assertAttributeNotEmpty('extensions', $extensions);
-    }
-
-    /**
-     * @test
-     */
     public function shouldAllowCreateGatewayWithTypeGivenInConfig()
     {
         $factory = new OmnipayGatewayFactory();
@@ -112,7 +94,7 @@ class OmnipayGatewayFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @expectedException \Payum\Core\Exception\LogicException
-     * @expectedExceptionMessage Given omnipay gateway type Invalid or class is not supported. Supported:
+     * @expectedExceptionMessage Given omnipay gateway type Invalid or class is not supported.
      */
     public function shouldThrowIfTypeNotValid()
     {
