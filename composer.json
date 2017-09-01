@@ -1,7 +1,7 @@
 {
     "name": "payum/omnipay-bridge",
     "type": "library",
-    "description": "This  bridge allows you to use omnipay gateways but in payum like way.",
+    "description": "This bridge allows you to use omnipay gateways but in payum like way.",
     "keywords": ["payment", "omnipay"],
     "homepage": "https://github.com/Payum/OmnipayBridge",
     "license": "MIT",
@@ -22,11 +22,12 @@
     "require": {
         "php": ">=5.5.0",
         "payum/core": "^1.3",
-        "omnipay/common": "^2.3"
+        "omnipay/common": "^3.0",
+        "php-http/guzzle6-adapter": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^4",
-        "omnipay/dummy": "^2"
+        "omnipay/dummy": "^3.0"
     },
     "config": {
         "bin-dir": "bin"
@@ -39,7 +40,9 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "2.0-dev"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

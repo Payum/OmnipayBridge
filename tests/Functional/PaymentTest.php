@@ -13,9 +13,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishSuccessfully()
     {
-        $factory = new OmnipayGatewayFactory('Dummy');
+        $factory = new OmnipayGatewayFactory();
 
-        $gateway = $factory->create([]);
+        $gateway = $factory->create(['type' => 'Dummy']);
 
         $date = new \DateTime('now + 2 year');
 
@@ -44,9 +44,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldFinishWithFailed()
     {
-        $factory = new OmnipayGatewayFactory('Dummy');
+        $factory = new OmnipayGatewayFactory();
 
-        $gateway = $factory->create([]);
+        $gateway = $factory->create(['type' => 'Dummy']);
 
         $date = new \DateTime('now + 2 year');
 
